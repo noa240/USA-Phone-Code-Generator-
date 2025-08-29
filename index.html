@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>US Area Code Lookup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: larger;
+      font-weight: bolder;
+      display: flex;
+      flex-directon: column;
+      align-items: center;
+      padding: 40px;
+      background: #d8d8d8;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 200px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+           background: #EEAECA;
+background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    }
+    button:hover{
+        border: none;
+  box-shadow: 0 0 15px 5px rgb(255, 255, 255);
+    background: #ecbdd2;
+  transform: scale(1.05);
+    }
+
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border: 1px solid #000000;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>USA Area Code Lookup</h1>
+  <input type="text" id="areaCodeInput" placeholder="Enter area code" maxlength="3"/>
+  <button onclick="lookupAreaCode()">Lookup</button>
+
+  <div id="result"></div>
+ 
+  <div id="warning" style="display: none; color: white; background-color: red; padding: 10px; margin-top: 10px;">
+  ⚠️ TOO EARLY - DON'T CALL!!!!</div>
+
+  <script>
+    const areaCodeData = {
+   
+      "201": { state: "New Jersey", timeZone: "America/New_York" },
+      "202": { state: "Washington, D.C.", timeZone: "America/New_York" },
+      "203": { state: "Connecticut", timeZone: "America/New_York" },
+      "205": { state: "Alabama", timeZone: "America/Chicago" },
+      "206": { state: "Washington", timeZone: "America/Los_Angeles" },
+      "207": { state: "Maine", timeZone: "America/New_York" },
+      "208": { state: "Idaho", timeZone: "America/Boise" },
+      "209": { state: "California", timeZone: "America/Los_Angeles" },
+      "212": { state: "New York", timeZone: "America/New_York" },
+      "213": { state: "California", timeZone: "America/Los_Angeles" },
+      "214": { state: "Texas", timeZone: "America/Chicago" },
+      "215": { state: "Pennsylvania", timeZone: "America/New_York" },
+      "216": { state: "Ohio", timeZone: "America/New_York" },
+      "310": { state: "California", timeZone: "America/Los_Angeles" },
+      "312": { state: "Illinois", timeZone: "America/Chicago" },
+      "315": { state: "New York", timeZone: "America/New_York" },
+      "347": { state: "New York", timeZone: "America/New_York" },
+      "415": { state: "California", timeZone: "America/Los_Angeles" },
+      "419": { state: "Ohio", timeZone: "America/New_York" },
+      "424": { state: "California", timeZone: "America/Los_Angeles" },
+      "512": { state: "Texas", timeZone: "America/Chicago" },
+      "602": { state: "Arizona", timeZone: "America/Phoenix" },
+      "617": { state: "Massachusetts", timeZone: "America/New_York" },
+      "646": { state: "New York", timeZone: "America/New_York" },
+      "703": { state: "Virginia", timeZone: "America/New_York" },
+      "704": { state: "North Carolina", timeZone: "America/New_York" },
+      "707": { state: "California", timeZone: "America/Los_Angeles" },
+      "732": { state: "New Jersey", timeZone: "America/New_York" },
+      "786": { state: "Florida", timeZone: "America/New_York" },
+      "818": { state: "California", timeZone: "America/Los_Angeles" },
+      "845": { state: "New York", timeZone: "America/New_York" },
+      "847": { state: "Illinois", timeZone: "America/Chicago" },
+      "856": { state: "New Jersey", timeZone: "America/New_York" },
+      "917": { state: "New York", timeZone: "America/New_York" },
+      "978": { state: "Massachusetts", timeZone: "America/New_York" },
+      "980": { state: "North Carolina", timeZone: "America/New_York" },
+      "985": { state: "Louisiana", timeZone: "America/Chicago" },
+      "520": { state: "Arizona", timeZone: "America/Phoenix" },
+        "201": { state: "New Jersey", timeZone: "America/New_York" },
+  "202": { state: "Washington, D.C.", timeZone: "America/New_York" },
+  "203": { state: "Connecticut", timeZone: "America/New_York" },
+  "205": { state: "Alabama", timeZone: "America/Chicago" },
+  "206": { state: "Washington", timeZone: "America/Los_Angeles" },
+  "207": { state: "Maine", timeZone: "America/New_York" },
+  "208": { state: "Idaho", timeZone: "America/Boise" },
+  "209": { state: "California", timeZone: "America/Los_Angeles" },
+  "210": { state: "Texas", timeZone: "America/Chicago" },
+  "212": { state: "New York", timeZone: "America/New_York" },
+  "213": { state: "California", timeZone: "America/Los_Angeles" },
+  "214": { state: "Texas", timeZone: "America/Chicago" },
+  "215": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "216": { state: "Ohio", timeZone: "America/New_York" },
+  "217": { state: "Illinois", timeZone: "America/Chicago" },
+  "218": { state: "Minnesota", timeZone: "America/Chicago" },
+  "219": { state: "Indiana", timeZone: "America/Indiana/Indianapolis" },
+  "224": { state: "Illinois", timeZone: "America/Chicago" },
+  "225": { state: "Louisiana", timeZone: "America/Chicago" },
+  "228": { state: "Mississippi", timeZone: "America/Chicago" },
+  "229": { state: "Georgia", timeZone: "America/New_York" },
+  "231": { state: "Michigan", timeZone: "America/Detroit" },
+  "234": { state: "Ohio", timeZone: "America/New_York" },
+  "239": { state: "Florida", timeZone: "America/New_York" },
+  "240": { state: "Maryland", timeZone: "America/New_York" },
+  "248": { state: "Michigan", timeZone: "America/Detroit" },
+  "251": { state: "Alabama", timeZone: "America/Chicago" },
+  "252": { state: "North Carolina", timeZone: "America/New_York" },
+  "253": { state: "Washington", timeZone: "America/Los_Angeles" },
+  "254": { state: "Texas", timeZone: "America/Chicago" },
+  "256": { state: "Alabama", timeZone: "America/Chicago" },
+  "260": { state: "Indiana", timeZone: "America/Indiana/Indianapolis" },
+  "262": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "267": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "269": { state: "Michigan", timeZone: "America/Detroit" },
+  "270": { state: "Kentucky", timeZone: "America/Chicago" },
+  "272": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "274": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "276": { state: "Virginia", timeZone: "America/New_York" },
+  "281": { state: "Texas", timeZone: "America/Chicago" },
+  "301": { state: "Maryland", timeZone: "America/New_York" },
+  "302": { state: "Delaware", timeZone: "America/New_York" },
+  "303": { state: "Colorado", timeZone: "America/Denver" },
+  "304": { state: "West Virginia", timeZone: "America/New_York" },
+  "305": { state: "Florida", timeZone: "America/New_York" },
+  "307": { state: "Wyoming", timeZone: "America/Denver" },
+  "308": { state: "Nebraska", timeZone: "America/Chicago" },
+  "309": { state: "Illinois", timeZone: "America/Chicago" },
+  "310": { state: "California", timeZone: "America/Los_Angeles" },
+  "312": { state: "Illinois", timeZone: "America/Chicago" },
+  "313": { state: "Michigan", timeZone: "America/Detroit" },
+  "314": { state: "Missouri", timeZone: "America/Chicago" },
+  "315": { state: "New York", timeZone: "America/New_York" },
+  "316": { state: "Kansas", timeZone: "America/Chicago" },
+  "317": { state: "Indiana", timeZone: "America/Indiana/Indianapolis" },
+  "318": { state: "Louisiana", timeZone: "America/Chicago" },
+  "319": { state: "Iowa", timeZone: "America/Chicago" },
+  "320": { state: "Minnesota", timeZone: "America/Chicago" },
+  "321": { state: "Florida", timeZone: "America/New_York" },
+  "323": { state: "California", timeZone: "America/Los_Angeles" },
+  "325": { state: "Texas", timeZone: "America/Chicago" },
+  "330": { state: "Ohio", timeZone: "America/New_York" },
+  "331": { state: "Illinois", timeZone: "America/Chicago" },
+  "334": { state: "Alabama", timeZone: "America/Chicago" },
+  "336": { state: "North Carolina", timeZone: "America/New_York" },
+  "337": { state: "Louisiana", timeZone: "America/Chicago" },
+  "339": { state: "Massachusetts", timeZone: "America/New_York" },
+  "346": { state: "Texas", timeZone: "America/Chicago" },
+  "347": { state: "New York", timeZone: "America/New_York" },
+  "351": { state: "Massachusetts", timeZone: "America/New_York" },
+  "352": { state: "Florida", timeZone: "America/New_York" },
+  "360": { state: "Washington", timeZone: "America/Los_Angeles" },
+  "361": { state: "Texas", timeZone: "America/Chicago" },
+  "364": { state: "Kentucky", timeZone: "America/Chicago" },
+  "369": { state: "Texas", timeZone: "America/Chicago" },
+  "380": { state: "Ohio", timeZone: "America/New_York" },
+  "385": { state: "Utah", timeZone: "America/Denver" },
+  "386": { state: "Florida", timeZone: "America/New_York" },
+  "401": { state: "Rhode Island", timeZone: "America/New_York" },
+  "402": { state: "Nebraska", timeZone: "America/Chicago" },
+  "404": { state: "Georgia", timeZone: "America/New_York" },
+  "405": { state: "Oklahoma", timeZone: "America/Chicago" },
+  "406": { state: "Montana", timeZone: "America/Denver" },
+  "407": { state: "Florida", timeZone: "America/New_York" },
+  "408": { state: "California", timeZone: "America/Los_Angeles" },
+  "409": { state: "Texas", timeZone: "America/Chicago" },
+  "410": { state: "Maryland", timeZone: "America/New_York" },
+  "412": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "413": { state: "Massachusetts", timeZone: "America/New_York" },
+  "414": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "415": { state: "California", timeZone: "America/Los_Angeles" },
+  "417": { state: "Missouri", timeZone: "America/Chicago" },
+  "419": { state: "Ohio", timeZone: "America/New_York" },
+  "423": { state: "Tennessee", timeZone: "America/New_York" },
+  "424": { state: "California", timeZone: "America/Los_Angeles" },
+  "425": { state: "Washington", timeZone: "America/Los_Angeles" },
+  "430": { state: "Texas", timeZone: "America/Chicago" },
+  "432": { state: "Texas", timeZone: "America/Chicago" },
+  "434": { state: "Virginia", timeZone: "America/New_York" },
+  "435": { state: "Utah", timeZone: "America/Denver" },
+  "440": { state: "Ohio", timeZone: "America/New_York" },
+  "442": { state: "California", timeZone: "America/Los_Angeles" },
+  "443": { state: "Maryland", timeZone: "America/New_York" },
+  "447": { state: "Michigan", timeZone: "America/Detroit" },
+  "458": { state: "Oregon", timeZone: "America/Los_Angeles" },
+  "464": { state: "Illinois", timeZone: "America/Chicago" },
+  "469": { state: "Texas", timeZone: "America/Chicago" },
+  "470": { state: "Georgia", timeZone: "America/New_York" },
+  "475": { state: "Connecticut", timeZone: "America/New_York" },
+  "478": { state: "Georgia", timeZone: "America/New_York" },
+  "479": { state: "Arkansas", timeZone: "America/Chicago" },
+  "480": { state: "Arizona", timeZone: "America/Phoenix" },
+  "484": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "501": { state: "Arkansas", timeZone: "America/Chicago" },
+  "502": { state: "Kentucky", timeZone: "America/Chicago" },
+  "503": { state: "Oregon", timeZone: "America/Los_Angeles" },
+  "504": { state: "Louisiana", timeZone: "America/Chicago" },
+  "505": { state: "New Mexico", timeZone: "America/Denver" },
+  "507": { state: "Minnesota", timeZone: "America/Chicago" },
+  "508": { state: "Massachusetts", timeZone: "America/New_York" },
+  "509": { state: "Washington", timeZone: "America/Los_Angeles" },
+  "510": { state: "California", timeZone: "America/Los_Angeles" },
+  "512": { state: "Texas", timeZone: "America/Chicago" },
+  "513": { state: "Ohio", timeZone: "America/New_York" },
+  "515": { state: "Iowa", timeZone: "America/Chicago" },
+  "516": { state: "New York", timeZone: "America/New_York" },
+  "517": { state: "Michigan", timeZone: "America/Detroit" },
+  "518": { state: "New York", timeZone: "America/New_York" },
+  "520": { state: "Arizona", timeZone: "America/Phoenix" },
+  "530": { state: "California", timeZone: "America/Los_Angeles" },
+  "531": { state: "Nebraska", timeZone: "America/Chicago" },
+  "534": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "539": { state: "Oklahoma", timeZone: "America/Chicago" },
+  "540": { state: "Virginia", timeZone: "America/New_York" },
+  "541": { state: "Oregon", timeZone: "America/Los_Angeles" },
+  "551": { state: "New Jersey", timeZone: "America/New_York" },
+  "559": { state: "California", timeZone: "America/Los_Angeles" },
+  "561": { state: "Florida", timeZone: "America/New_York" },
+  "562": { state: "California", timeZone: "America/Los_Angeles" },
+  "563": { state: "Iowa", timeZone: "America/Chicago" },
+  "564": { state: "Washington", timeZone: "America/Los_Angeles" },
+  "567": { state: "Ohio", timeZone: "America/New_York" },
+  "570": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "571": { state: "Virginia", timeZone: "America/New_York" },
+  "573": { state: "Missouri", timeZone: "America/Chicago" },
+  "574": { state: "Indiana", timeZone: "America/Indiana/Indianapolis" },
+  "575": { state: "New Mexico", timeZone: "America/Denver" },
+  "580": { state: "Oklahoma", timeZone: "America/Chicago" },
+  "585": { state: "New York", timeZone: "America/New_York" },
+  "586": { state: "Michigan", timeZone: "America/Detroit" },
+  "601": { state: "Mississippi", timeZone: "America/Chicago" },
+  "602": { state: "Arizona", timeZone: "America/Phoenix" },
+  "603": { state: "New Hampshire", timeZone: "America/New_York" },
+  "605": { state: "South Dakota", timeZone: "America/Chicago" },
+  "606": { state: "Kentucky", timeZone: "America/Chicago" },
+  "607": { state: "New York", timeZone: "America/New_York" },
+  "608": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "609": { state: "New Jersey", timeZone: "America/New_York" },
+  "610": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "612": { state: "Minnesota", timeZone: "America/Chicago" },
+  "614": { state: "Ohio", timeZone: "America/New_York" },
+  "615": { state: "Tennessee", timeZone: "America/New_York" },
+  "616": { state: "Michigan", timeZone: "America/Detroit" },
+  "617": { state: "Massachusetts", timeZone: "America/New_York" },
+  "618": { state: "Illinois", timeZone: "America/Chicago" },
+  "619": { state: "California", timeZone: "America/Los_Angeles" },
+  "620": { state: "Kansas", timeZone: "America/Chicago" },
+  "623": { state: "Arizona", timeZone: "America/Phoenix" },
+  "626": { state: "California", timeZone: "America/Los_Angeles" },
+  "628": { state: "California", timeZone: "America/Los_Angeles" },
+  "630": { state: "Illinois", timeZone: "America/Chicago" },
+  "631": { state: "New York", timeZone: "America/New_York" },
+  "636": { state: "Missouri", timeZone: "America/Chicago" },
+  "641": { state: "Iowa", timeZone: "America/Chicago" },
+  "646": { state: "New York", timeZone: "America/New_York" },
+  "650": { state: "California", timeZone: "America/Los_Angeles" },
+  "651": { state: "Minnesota", timeZone: "America/Chicago" },
+  "660": { state: "Missouri", timeZone: "America/Chicago" },
+  "661": { state: "California", timeZone: "America/Los_Angeles" },
+  "662": { state: "Mississippi", timeZone: "America/Chicago" },
+  "667": { state: "Maryland", timeZone: "America/New_York" },
+  "669": { state: "California", timeZone: "America/Los_Angeles" },
+  "678": { state: "Georgia", timeZone: "America/New_York" },
+  "681": { state: "West Virginia", timeZone: "America/New_York" },
+  "682": { state: "Texas", timeZone: "America/Chicago" },
+  "701": { state: "North Dakota", timeZone: "America/Chicago" },
+  "702": { state: "Nevada", timeZone: "America/Los_Angeles" },
+  "703": { state: "Virginia", timeZone: "America/New_York" },
+  "704": { state: "North Carolina", timeZone: "America/New_York" },
+  "706": { state: "Georgia", timeZone: "America/New_York" },
+  "707": { state: "California", timeZone: "America/Los_Angeles" },
+  "708": { state: "Illinois", timeZone: "America/Chicago" },
+  "712": { state: "Iowa", timeZone: "America/Chicago" },
+  "713": { state: "Texas", timeZone: "America/Chicago" },
+  "714": { state: "California", timeZone: "America/Los_Angeles" },
+  "715": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "716": { state: "New York", timeZone: "America/New_York" },
+  "717": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "718": { state: "New York", timeZone: "America/New_York" },
+  "719": { state: "Colorado", timeZone: "America/Denver" },
+  "720": { state: "Colorado", timeZone: "America/Denver" },
+  "724": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "725": { state: "Nevada", timeZone: "America/Los_Angeles" },
+  "727": { state: "Florida", timeZone: "America/New_York" },
+  "730": { state: "Illinois", timeZone: "America/Chicago" },
+  "731": { state: "Tennessee", timeZone: "America/Chicago" },
+  "732": { state: "New Jersey", timeZone: "America/New_York" },
+  "734": { state: "Michigan", timeZone: "America/Detroit" },
+    "737": { state: "Texas", timeZone: "America/Chicago" },
+  "740": { state: "Ohio", timeZone: "America/New_York" },
+  "743": { state: "North Carolina", timeZone: "America/New_York" },
+  "747": { state: "California", timeZone: "America/Los_Angeles" },
+  "754": { state: "Florida", timeZone: "America/New_York" },
+  "757": { state: "Virginia", timeZone: "America/New_York" },
+  "760": { state: "California", timeZone: "America/Los_Angeles" },
+  "762": { state: "Georgia", timeZone: "America/New_York" },
+  "763": { state: "Minnesota", timeZone: "America/Chicago" },
+  "765": { state: "Indiana", timeZone: "America/Indiana/Indianapolis" },
+  "769": { state: "Mississippi", timeZone: "America/Chicago" },
+  "770": { state: "Georgia", timeZone: "America/New_York" },
+  "772": { state: "Florida", timeZone: "America/New_York" },
+  "773": { state: "Illinois", timeZone: "America/Chicago" },
+  "774": { state: "Massachusetts", timeZone: "America/New_York" },
+  "775": { state: "Nevada", timeZone: "America/Los_Angeles" },
+  "779": { state: "Illinois", timeZone: "America/Chicago" },
+  "781": { state: "Massachusetts", timeZone: "America/New_York" },
+  "785": { state: "Kansas", timeZone: "America/Chicago" },
+  "786": { state: "Florida", timeZone: "America/New_York" },
+  "801": { state: "Utah", timeZone: "America/Denver" },
+  "802": { state: "Vermont", timeZone: "America/New_York" },
+  "803": { state: "South Carolina", timeZone: "America/New_York" },
+  "804": { state: "Virginia", timeZone: "America/New_York" },
+  "805": { state: "California", timeZone: "America/Los_Angeles" },
+  "806": { state: "Texas", timeZone: "America/Chicago" },
+  "808": { state: "Hawaii", timeZone: "Pacific/Honolulu" },
+  "810": { state: "Michigan", timeZone: "America/Detroit" },
+  "812": { state: "Indiana", timeZone: "America/Indiana/Indianapolis" },
+  "813": { state: "Florida", timeZone: "America/New_York" },
+  "814": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "815": { state: "Illinois", timeZone: "America/Chicago" },
+  "816": { state: "Missouri", timeZone: "America/Chicago" },
+  "817": { state: "Texas", timeZone: "America/Chicago" },
+  "818": { state: "California", timeZone: "America/Los_Angeles" },
+  "828": { state: "North Carolina", timeZone: "America/New_York" },
+  "830": { state: "Texas", timeZone: "America/Chicago" },
+  "831": { state: "California", timeZone: "America/Los_Angeles" },
+  "832": { state: "Texas", timeZone: "America/Chicago" },
+  "843": { state: "South Carolina", timeZone: "America/New_York" },
+  "845": { state: "New York", timeZone: "America/New_York" },
+  "847": { state: "Illinois", timeZone: "America/Chicago" },
+  "848": { state: "New Jersey", timeZone: "America/New_York" },
+  "850": { state: "Florida", timeZone: "America/Chicago" },
+  "856": { state: "New Jersey", timeZone: "America/New_York" },
+  "857": { state: "Massachusetts", timeZone: "America/New_York" },
+  "858": { state: "California", timeZone: "America/Los_Angeles" },
+  "859": { state: "Kentucky", timeZone: "America/New_York" },
+  "860": { state: "Connecticut", timeZone: "America/New_York" },
+  "862": { state: "New Jersey", timeZone: "America/New_York" },
+  "863": { state: "Florida", timeZone: "America/New_York" },
+  "864": { state: "South Carolina", timeZone: "America/New_York" },
+  "865": { state: "Tennessee", timeZone: "America/New_York" },
+  "870": { state: "Arkansas", timeZone: "America/Chicago" },
+  "872": { state: "Illinois", timeZone: "America/Chicago" },
+  "878": { state: "Pennsylvania", timeZone: "America/New_York" },
+  "901": { state: "Tennessee", timeZone: "America/Chicago" },
+  "903": { state: "Texas", timeZone: "America/Chicago" },
+  "904": { state: "Florida", timeZone: "America/New_York" },
+  "906": { state: "Michigan", timeZone: "America/Detroit" },
+  "907": { state: "Alaska", timeZone: "America/Anchorage" },
+  "908": { state: "New Jersey", timeZone: "America/New_York" },
+  "909": { state: "California", timeZone: "America/Los_Angeles" },
+  "910": { state: "North Carolina", timeZone: "America/New_York" },
+  "912": { state: "Georgia", timeZone: "America/New_York" },
+  "913": { state: "Kansas", timeZone: "America/Chicago" },
+  "914": { state: "New York", timeZone: "America/New_York" },
+  "915": { state: "Texas", timeZone: "America/Denver" },
+  "916": { state: "California", timeZone: "America/Los_Angeles" },
+  "917": { state: "New York", timeZone: "America/New_York" },
+  "918": { state: "Oklahoma", timeZone: "America/Chicago" },
+  "919": { state: "North Carolina", timeZone: "America/New_York" },
+  "920": { state: "Wisconsin", timeZone: "America/Chicago" },
+  "925": { state: "California", timeZone: "America/Los_Angeles" },
+  "928": { state: "Arizona", timeZone: "America/Phoenix" },
+  "929": { state: "New York", timeZone: "America/New_York" },
+  "931": { state: "Tennessee", timeZone: "America/Chicago" },
+  "936": { state: "Texas", timeZone: "America/Chicago" },
+  "937": { state: "Ohio", timeZone: "America/New_York" },
+  "938": { state: "Alabama", timeZone: "America/Chicago" },
+  "939": { state: "Puerto Rico", timeZone: "America/Puerto_Rico" },
+  "940": { state: "Texas", timeZone: "America/Chicago" },
+  "941": { state: "Florida", timeZone: "America/New_York" },
+  "947": { state: "Michigan", timeZone: "America/Detroit" },
+  "949": { state: "California", timeZone: "America/Los_Angeles" },
+  "951": { state: "California", timeZone: "America/Los_Angeles" },
+  "952": { state: "Minnesota", timeZone: "America/Chicago" },
+  "954": { state: "Florida", timeZone: "America/New_York" },
+  "956": { state: "Texas", timeZone: "America/Chicago" },
+  "959": { state: "Connecticut", timeZone: "America/New_York" },
+  "970": { state: "Colorado", timeZone: "America/Denver" },
+  "971": { state: "Oregon", timeZone: "America/Los_Angeles" },
+  "972": { state: "Texas", timeZone: "America/Chicago" },
+  "973": { state: "New Jersey", timeZone: "America/New_York" },
+  "975": { state: "Missouri", timeZone: "America/Chicago" },
+  "976": { state: "Reserved", timeZone: "America/New_York" },
+  "978": { state: "Massachusetts", timeZone: "America/New_York" },
+  "979": { state: "Texas", timeZone: "America/Chicago" },
+  "980": { state: "North Carolina", timeZone: "America/New_York" },
+  "984": { state: "North Carolina", timeZone: "America/New_York" },
+ 
+    };
+function lookupAreaCode() {
+  const code = document.getElementById("areaCodeInput").value.trim();
+  const resultDiv = document.getElementById("result");
+  const warningDiv = document.getElementById("warning");
+
+  if (areaCodeData[code]) {
+    const { state, timeZone } = areaCodeData[code];
+
+    const timeObj = new Date().toLocaleString('en-US', { timeZone: timeZone });
+    const localTime = new Date(timeObj);
+    const hour = localTime.getHours();
+    const formattedTime = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      timeZone: timeZone
+    }).format(new Date());
+
+    resultDiv.innerHTML = `
+      <strong>Area Code:</strong> ${code}<br/>
+      <strong>State:</strong> ${state}<br/>
+      <strong>Current Time:</strong> ${formattedTime}
+    `;
+
+   
+    if (hour < 9) {
+      warningDiv.style.display = "block";
+    } else {
+      warningDiv.style.display = "none";
+    }
+
+  } else {
+    resultDiv.innerHTML = `<span style="color:red;">Area code ${code} not found in database.</span>`;
+    warningDiv.style.display = "none";
+  }
+}
+   
+  </script>
+ 
+</body>
+</html>
