@@ -420,6 +420,10 @@ function lookupAreaCode() {
   const code = document.getElementById("areaCodeInput").value.trim();
   const resultDiv = document.getElementById("result");
   const warningDiv = document.getElementById("warning");
+  if (!areaCodeData[code]) {
+   alert ("That's great!!! if you'r trying to reach Narnia...")
+   return;
+  }
 
   if (areaCodeData[code]) {
     const { state, timeZone } = areaCodeData[code];
@@ -451,6 +455,7 @@ function lookupAreaCode() {
     resultDiv.innerHTML = `<span style="color:red;">Area code ${code} not found in database.</span>`;
     warningDiv.style.display = "none";
   }
+ 
 }
    
   </script>
