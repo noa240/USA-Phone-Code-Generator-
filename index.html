@@ -55,20 +55,178 @@ transition: box-shadow 0.2s ease, transform 0.2s ease;
       text-align: center;
     }
     footer {
-      flex-direction: row;
-      align-items: center;
-      background: #3F5EFB;
-background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(207, 70, 252, 1) 100%);
-font-size: medium;
-font-weight: bolder;
-font-family: Arial, Helvetica, sans-serif;
-color: #000000;
+  position: relative; /* שימוש ב-position relative כדי להחיל את האנימציה */
+  width: 100%;
+  background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(207, 70, 252, 1) 100%);
+  color: white;
+  font-size: medium;
+  font-weight: bolder;
+  font-family: 'Arial', Helvetica, sans-serif;
+  text-align: center;
+  padding: 40px;
+  margin-top: 60px; /* מרווח עליון למרחק מהתוכן */
+  border-top-left-radius: 50px;  /* קצוות מעוגלים בצד שמאל */
+  border-top-right-radius: 50px; /* קצוות מעוגלים בצד ימין */
+  overflow: hidden; /* מונע שולי הצורה להיתפס */
+  box-sizing: border-box;
+  animation: slideUp 1s ease-out forwards; /* אנימציה של החלקה */
+}
 
-    }
+/* אנימציה של החלקה */
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px); /* מתחיל מחוץ למסך */
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+footer {
+  position: fixed;  /* הדבקה לתחתית */
+  bottom: 0;        /* הצמדת הפוטר לתחתית הדף */
+  left: 0;          /* הצמדת הפוטר לשמאל */
+  width: 100%;      /* הפוטר תופס את כל רוחב הדף */
+  background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(207, 70, 252, 1) 100%);
+  color: white;
+  font-size: medium;
+  font-weight: bolder;
+  font-family: 'Arial', Helvetica, sans-serif;
+  text-align: center;
+  padding: 40px;
+  border-top-left-radius: 50px;  /* קצוות מעוגלים בצד שמאל */
+  border-top-right-radius: 50px; /* קצוות מעוגלים בצד ימין */
+  z-index: 10; /* לוודא שהפוטר יהיה מעל התוכן */
+  box-sizing: border-box;
+  animation: slideUp 1s ease-out forwards; /* אנימציה של החלקה */
+}
+
+/* אנימציה של החלקה */
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px); /* מתחיל מחוץ למסך */
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  bottom: -50px; /* מיקום חצי עיגול מתחת לפוטר */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  background-color: #3F5EFB;
+  border-radius: 50%;
+  z-index: -1; /* כדי שהעיגול יהיה מאחורי הפוטר */
+  animation: pulse 3s ease-out infinite; /* אנימציה נוספת שתעשה את העיגול פועם */
+}
+
+footer::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+  background-color: #cf46fc;
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulse2 4s ease-out infinite;
+}
+
+/* אפקט של פועם על העיגול */
+@keyframes pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulse2 {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.6;
+  }
+}
+header {
+  width: 100%;
+  background: #3F5EFB;
+  background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(207, 70, 252, 1) 100%);
+  padding: 40px 20px; /* רווחים בין התוכן לשולי ה-header */
+  display: flex;
+  justify-content: space-between; /* הסמל בצד ימין, הכותרת במרכז */
+  align-items: center;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: slideDown 1s ease-out forwards; /* אנימציה של החלקה מלמעלה */
+  overflow: hidden;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%); /* צורת גיאומטרית עדינה */
+  border-radius: 0 0 50% 50%; /* עיגול בקצוות התחתונים */
+}
+
+header img {
+  width: 100x;
+  height: 100px; /* וודא שהגובה והרחב יהיו שווים כדי שזה יהיה עיגול */
+  border-radius: 50%; /* הופך את התמונה לעיגול */
+  margin-bottom: 40px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: white;
+  font-weight: bolder;
+  text-align: center; /* כותרת במרכז */
+  margin: 0;
+  flex-grow: 1; /* יאפשר לכותרת להיות במרכז */
+  z-index: 1; /* הכותרת תהיה מעל הצורות */
+}
+
+/* אנימציה של החלקה לכיוון למטה */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
   </style>
 </head>
 <body>
-  <h1>USA Area Code Lookup</h1>
+  <header>
+    <h1>USA Area Code Lookup</h1>
+    <img src="סחלב.jpg" alt="Company Logo" />
+
+  </header>
+  
   <input type="text" id="areaCodeInput" placeholder="Enter area code" maxlength="3"/>
   <button onclick="lookupAreaCode()">Lookup</button>
 
