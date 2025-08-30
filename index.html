@@ -234,9 +234,14 @@ border:#000000;
 
   </header>
   <form onsubmit="lookupAreaCode(); goawaysquere(); return false;">
-  <input type="text" id="areaCodeInput" placeholder="Enter area code" maxlength="3"/>
-  <button onclick="lookupAreaCode(); goawaysquere()">Lookup</button>
-</form>
+    <input 
+      type="text" 
+      id="areaCodeInput" 
+      placeholder="Enter area code" 
+      maxlength="3"
+    />
+    <button type="submit">Lookup</button>
+  </form>
   <div id="result"></div>
   <div id="cover"></div>
   <div id="warning" style="display: none; color: white; background-color: red; padding: 10px; margin-top: 10px;">
@@ -597,10 +602,6 @@ function lookupAreaCode() {
   const code = document.getElementById("areaCodeInput").value.trim();
   const resultDiv = document.getElementById("result");
   const warningDiv = document.getElementById("warning");
-  if (!areaCodeData[code]) {
-   alert ("That's great!!! if you'r trying to reach Narnia...")
-   return;
-  }
 
   if (areaCodeData[code]) {
     const { state, timeZone } = areaCodeData[code];
@@ -629,8 +630,10 @@ function lookupAreaCode() {
     }
 
   } else {
+   
     resultDiv.innerHTML = `<span style="color:red;">Area code ${code} not found in database.</span>`;
     warningDiv.style.display = "none";
+     alert ("That's great!!! if you'r trying to reach Narnia...")
   }
  
 }
